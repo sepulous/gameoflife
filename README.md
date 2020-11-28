@@ -1,0 +1,2 @@
+# Game of Life
+[Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) is a popular cellular automaton that was created by John Conway in 1970. This is a simple implementation of it in Python, using [Pygame](https://www.pygame.org).
