@@ -25,7 +25,7 @@ def main():
     window_width = window_height
     window = pygame.display.set_mode((window_width, window_height))
 
-    font = pygame.font.SysFont('Comic Sans MS', 18)
+    font = pygame.font.SysFont('consolas', 18)
     
     matrix_order = 40
     line_width = 1
@@ -85,10 +85,9 @@ def main():
             color = 0x0 if cell.alive else 0xffffff
             pygame.draw.rect(window, color, rect)
 
-
         pygame.draw.rect(window, 0xffffff, pygame.Rect(0, 0, int(window_width * 0.35), 50))
-        text_surface = font.render(f'[SPACE] {"Pause" if game_state == STATE_RUNNING else "Start"}     [ESC] Reset', False, (0, 0, 0))
-        window.blit(text_surface, (0, 10))
+        text_surface = font.render(f'[SPACE] {"Pause" if game_state == STATE_RUNNING else "Start"}  [ESC] Reset', True, (0, 0, 0))
+        window.blit(text_surface, (10, 15))
 
         pygame.display.flip()
 
