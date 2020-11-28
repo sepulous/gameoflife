@@ -1,4 +1,5 @@
 from typing import List
+import time
 
 class CellMatrix:
     def __init__(self, size: int):
@@ -6,6 +7,7 @@ class CellMatrix:
         self.matrix = [
             [Cell() for _ in range(size)] for _ in range(size)
         ]
+        self.last_update = 0
 
 
     def get_cells(self):
@@ -21,6 +23,16 @@ class CellMatrix:
         for row in self.matrix:
             for cell in row:
                 cell.alive = False
+
+
+    def should_update(self, updates_per_second: int):
+        interval = 1 / updates_per_second
+        current_time = time.time()
+        if current_time - self.last_update >= interval:
+            self.last_update = current_time
+            return True
+        else:
+            return False
 
 
     def update(self):

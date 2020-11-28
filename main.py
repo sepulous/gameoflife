@@ -27,7 +27,7 @@ def main():
 
     font = pygame.font.SysFont('consolas', 18)
     
-    matrix_order = 40
+    matrix_order = 20
     line_width = 1
 
     cell_size = (window_width / matrix_order) - line_width
@@ -43,6 +43,7 @@ def main():
         else:
             x_pos += cell_size + line_width
 
+    updates_per_second = 3
 
     game_state = STATE_RESET
     while True:
@@ -76,8 +77,7 @@ def main():
                     cell_matrix.toggle_cell(i, j)
 
 
-        if game_state == STATE_RUNNING:
-            time.sleep(0.2)
+        if game_state == STATE_RUNNING and cell_matrix.should_update(updates_per_second):
             cell_matrix.update()
 
         window.fill(0)
