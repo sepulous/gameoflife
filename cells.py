@@ -47,12 +47,14 @@ class CellMatrix:
             live_neighbors = [neighbor for neighbor in neighbors if neighbor.alive]
             return len(live_neighbors)
         
+        # Update cell states
         for row in self.matrix:
             for cell in row:
                 if cell.next_state is not None:
                     cell.alive = bool(cell.next_state)
                     cell.next_state = None
 
+        # Determine cell states for next generation
         for i in range(self.size):
             for j in range(self.size):
                 cell = self.matrix[i][j]
