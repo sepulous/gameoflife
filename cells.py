@@ -36,7 +36,7 @@ class CellMatrix:
 
 
     def update(self):
-        def get_neighbors(i: int, j: int) -> List[Cell]:
+        def get_live_neighbor_count(i: int, j: int) -> List[Cell]:
             neighbor_coords = [
                 (i - 1, j - 1), (i - 1, j), (i - 1, j + 1),
                 (i,     j - 1),             (i,     j + 1),
@@ -44,7 +44,8 @@ class CellMatrix:
             ]
             neighbor_coords = [c for c in neighbor_coords if (0 <= c[0] < self.size) and (0 <= c[1] < self.size)]
             neighbors = [self.matrix[coord[0]][coord[1]] for coord in neighbor_coords]
-            return neighbors
+            live_neighbors = [neighbor for neighbor in neighbors if neighbor.alive]
+            return len(live_neighbors)
         
         for row in self.matrix:
             for cell in row:
@@ -55,13 +56,12 @@ class CellMatrix:
         for i in range(self.size):
             for j in range(self.size):
                 cell = self.matrix[i][j]
-                neighbors = get_neighbors(i, j)
-                live_neighbors = [n for n in neighbors if n.alive]
+                live_neighbor_count = get_live_neighbor_count(i, j)
                 if cell.alive:
-                    if len(live_neighbors) not in [2, 3]:
+                    if live_neighbor_count not in [2, 3]:
                         cell.next_state = Cell.DEAD
                 else:
-                    if len(live_neighbors) == 3:
+                    if live_neighbor_count == 3:
                         cell.next_state = Cell.ALIVE
         
 
