@@ -52,6 +52,7 @@ class CellMatrix:
             live_neighbors = [neighbor for neighbor in neighbors if neighbor.alive]
             return len(live_neighbors)
         
+        # Update cell states
         for row in self.matrix:
             for cell in row:
                 if cell.next_state is not None:
