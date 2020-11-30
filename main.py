@@ -4,7 +4,8 @@ import os
 
 import pygame
 
-from cells import *
+from cell import *
+from ui import UI
 
 
 VERSION = '0.1.0'
@@ -27,23 +28,10 @@ def main():
 
     font = pygame.font.SysFont('consolas', 18)
     
-    matrix_order = 20
-    line_width = 1
+    matrix_order = 30
 
-    cell_size = (window_width / matrix_order) - line_width
-    cell_matrix = CellMatrix(matrix_order)
-
-    rectangles = []
-    x_pos, y_pos = 0, 0
-    for index in range(matrix_order**2):
-        rectangles.append(pygame.Rect(x_pos, y_pos, cell_size, cell_size))
-        if (index + 1) % matrix_order == 0:
-            x_pos = 0
-            y_pos += cell_size + line_width
-        else:
-            x_pos += cell_size + line_width
-
-    updates_per_second = 3
+    cell_size = (window_width / matrix_order) - UI.get_line_width()
+    cell_matrix = CellMatrix(matrix_order, cell_size, (window_width, window_height))
 
     game_state = STATE_RESET
     while True:
@@ -62,29 +50,24 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Left click
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
-                    i, j = 0, 0
-                    for (count, rect) in enumerate(rectangles, start=1):
-                        between_x_bounds = rect.x <= mouse_x <= rect.x + cell_size + line_width
-                        between_y_bounds = rect.y <= mouse_y <= rect.y + cell_size + line_width
+                    for cell in cell_matrix.get_cells():
+                        between_x_bounds = cell.x_pos <= mouse_x <= cell.x_pos + cell_size + UI.get_line_width()
+                        between_y_bounds = cell.y_pos <= mouse_y <= cell.y_pos + cell_size + UI.get_line_width()
                         if between_x_bounds and between_y_bounds:
+                            cell.toggle()
                             break
-                        elif count % matrix_order == 0:
-                            i += 1
-                            j = 0
-                        else:
-                            j += 1
-
-                    cell_matrix.toggle_cell(i, j)
 
 
-        if game_state == STATE_RUNNING and cell_matrix.should_update(updates_per_second):
+        if game_state == STATE_RUNNING and cell_matrix.should_update():
             cell_matrix.update()
 
+        # Draw cells
         window.fill(0)
-        for (rect, cell) in zip(rectangles, cell_matrix.get_cells()):
+        for cell in cell_matrix.get_cells():
             color = 0x0 if cell.alive else 0xffffff
-            pygame.draw.rect(window, color, rect)
+            pygame.draw.rect(window, color, pygame.Rect(cell.x_pos, cell.y_pos, cell.size, cell.size))
 
+        # Draw menu
         pygame.draw.rect(window, 0xffffff, pygame.Rect(0, 0, int(window_width * 0.35), 50))
         text_surface = font.render(f'[SPACE] {"Pause" if game_state == STATE_RUNNING else "Start"}  [ESC] Reset', True, (0, 0, 0))
         window.blit(text_surface, (10, 15))
