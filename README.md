@@ -3,8 +3,8 @@
 
 ## To Be Implemented
 The following is a list of features I will implement soon, and is by no means exhaustive:
-> * The ability to change colors
-> * Adjustable update speed
-> * Dynamically adjust matrix size
-> * Single-step forward and backward
-> * Save/load configurations
+* The ability to change colors
+* Adjustable update speed
+* Dynamically adjust matrix size
+* Single-step forward and backward
+* Save/load configurations
