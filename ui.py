@@ -2,7 +2,7 @@
 
 class UI:
     line_width = 1
-    updates_per_second = 5
+    updates_per_second = 10
 
     @staticmethod
     def get_line_width():

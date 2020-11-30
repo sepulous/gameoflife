@@ -31,15 +31,6 @@ class CellMatrix:
             for cell in row:
                 cell.alive = False
 
-    def should_update(self):
-        interval = 1 / UI.get_updates_per_second()
-        current_time = time.time()
-        if current_time - self.last_update >= interval:
-            self.last_update = current_time
-            return True
-        else:
-            return False
-
     def update(self):
         def get_live_neighbor_count(i: int, j: int) -> List[Cell]:
             neighbor_coords = [
@@ -59,6 +50,7 @@ class CellMatrix:
                     cell.alive = bool(cell.next_state)
                     cell.next_state = None
 
+        # Determine cell states for next generation
         for i in range(self.matrix_size):
             for j in range(self.matrix_size):
                 cell = self.matrix[i][j]

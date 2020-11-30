@@ -35,6 +35,10 @@ def main():
 
     game_state = STATE_RESET
     while True:
+        if game_state == STATE_RUNNING:
+            pygame.time.Clock().tick(UI.get_updates_per_second())
+            cell_matrix.update()
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -56,10 +60,6 @@ def main():
                         if between_x_bounds and between_y_bounds:
                             cell.toggle()
                             break
-
-
-        if game_state == STATE_RUNNING and cell_matrix.should_update():
-            cell_matrix.update()
 
         # Draw cells
         window.fill(0)
