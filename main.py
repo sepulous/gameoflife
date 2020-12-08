@@ -22,16 +22,13 @@ def main():
     
     os.environ['SDL_VIDEO_CENTERED'] = '1' # Center the window
 
-    window_height = int(pygame.display.Info().current_h * 0.8)
-    window_width = window_height
-    window = pygame.display.set_mode((window_width, window_height))
+    window_size = int(pygame.display.Info().current_h * 0.8)
+    window = pygame.display.set_mode((window_size, window_size))
 
     font = pygame.font.SysFont('consolas', 18)
     
     matrix_order = 30
-
-    cell_size = (window_width / matrix_order) - UI.get_line_width()
-    cell_matrix = CellMatrix(matrix_order, cell_size, (window_width, window_height))
+    cell_matrix = CellMatrix(matrix_order, window_size)
 
     game_state = STATE_RESET
     while True:
@@ -55,8 +52,8 @@ def main():
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
                     for cell in cell_matrix.get_cells():
-                        between_x_bounds = cell.x_pos <= mouse_x <= cell.x_pos + cell_size + UI.get_line_width()
-                        between_y_bounds = cell.y_pos <= mouse_y <= cell.y_pos + cell_size + UI.get_line_width()
+                        between_x_bounds = cell.rect.x <= mouse_x <= cell.rect.x + cell.rect.size[0] + UI.get_line_width()
+                        between_y_bounds = cell.rect.y <= mouse_y <= cell.rect.y + cell.rect.size[0] + UI.get_line_width()
                         if between_x_bounds and between_y_bounds:
                             cell.toggle()
                             break
@@ -65,10 +62,10 @@ def main():
         window.fill(0)
         for cell in cell_matrix.get_cells():
             color = 0x0 if cell.alive else 0xffffff
-            pygame.draw.rect(window, color, pygame.Rect(cell.x_pos, cell.y_pos, cell.size, cell.size))
+            pygame.draw.rect(window, color, cell.rect)
 
         # Draw menu
-        pygame.draw.rect(window, 0xffffff, pygame.Rect(0, 0, int(window_width * 0.35), 50))
+        pygame.draw.rect(window, 0xffffff, pygame.Rect(0, 0, int(window_size * 0.35), 50))
         text_surface = font.render(f'[SPACE] {"Pause" if game_state == STATE_RUNNING else "Start"}  [ESC] Reset', True, (0, 0, 0))
         window.blit(text_surface, (10, 15))
 

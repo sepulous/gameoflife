@@ -1,20 +1,23 @@
-from typing import List, Tuple
+from typing import List
 import time
+
+import pygame
 
 from ui import UI
 
 class CellMatrix:
-    def __init__(self, matrix_size: int, cell_size: int, window_size: Tuple[int, int]):
+    def __init__(self, matrix_size: int, window_size: int):
         self.matrix_size = matrix_size
-        self.matrix = self._generate_matrix(matrix_size, cell_size, window_size)
+        self.matrix = self._generate_matrix(matrix_size, window_size)
         self.last_update = 0
 
-    def _generate_matrix(self, matrix_size: int, cell_size: int, window_size: Tuple[int, int]):
+    def _generate_matrix(self, matrix_size: int, window_size: int):
         matrix = [[] for _ in range(matrix_size)]
+        cell_size = (window_size / matrix_size) - UI.get_line_width()
         x_pos, y_pos = 0, 0
         for row in matrix:
             for index in range(matrix_size):
-                row.append(Cell(cell_size, x_pos, y_pos))
+                row.append(Cell(pygame.Rect(x_pos, y_pos, cell_size, cell_size)))
                 if (index + 1) % matrix_size == 0:
                     x_pos = 0
                     y_pos += cell_size + UI.get_line_width()
@@ -24,7 +27,7 @@ class CellMatrix:
         return matrix
 
     def get_cells(self):
-        return [cell for row in self.matrix for cell in row]
+        return [cell for row in self.matrix for cell in row] # Flatten 2D matrix
 
     def reset(self):
         for row in self.matrix:
@@ -67,12 +70,10 @@ class Cell:
     DEAD = 0
     ALIVE = 1
 
-    def __init__(self, size: int, x_pos: int, y_pos: int):
+    def __init__(self, rect: pygame.Rect):
         self.alive = False
         self.next_state = None
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.size = size
+        self.rect = rect
 
     def toggle(self):
         self.alive = not self.alive
