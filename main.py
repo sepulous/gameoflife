@@ -51,6 +51,12 @@ def main():
                     cell_matrix.reset()
                 elif event.key == pygame.K_h:
                     UI.set_menu_shown(not UI.get_menu_shown())
+                elif event.key == pygame.K_RIGHT:
+                    if game_state != STATE_RUNNING:
+                        cell_matrix.update()
+                elif event.key == pygame.K_LEFT:
+                    if game_state != STATE_RUNNING:
+                        cell_matrix.step_back()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Left click
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
@@ -76,13 +82,14 @@ def main():
 
             menu_text = [
                 "  [ESC]  Reset",
-                "[SPACE]  {}".format("Pause" if game_state == STATE_RUNNING else "Start")
+                "[SPACE]  {}".format("Pause" if game_state == STATE_RUNNING else "Start"),
+                "[<] [>]  Single Step"
             ]
             text_offset_y = window_size * 0.025
             for text in menu_text:
                 text_surface = font.render(text, True, (255, 255, 255))
                 window.blit(text_surface, (20, text_offset_y))
-                text_offset_y *= 2
+                text_offset_y += 25
 
             text_surface = font.render("[H] Hide Menu", True, (255, 255, 255))
             window.blit(text_surface, (20, window_size * 0.18))

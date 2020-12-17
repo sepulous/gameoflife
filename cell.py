@@ -10,6 +10,7 @@ class CellMatrix:
         self.matrix_size = matrix_size
         self.matrix = self._generate_matrix(matrix_size, window_size)
         self.last_update = 0
+        self.history = []
 
     def _generate_matrix(self, matrix_size: int, window_size: int):
         matrix = [[] for _ in range(matrix_size)]
@@ -25,6 +26,14 @@ class CellMatrix:
                     x_pos += cell_size + UI.get_line_width()
 
         return matrix
+
+    def _save_current_state(self):
+        if len(self.history) >= 30:
+            del self.history[0]
+            
+        self.history.append([
+            [cell.alive for cell in row] for row in self.matrix
+        ])
 
     def get_cells(self):
         return [cell for row in self.matrix for cell in row] # Flatten 2D matrix
@@ -45,6 +54,9 @@ class CellMatrix:
             neighbors = [self.matrix[coord[0]][coord[1]] for coord in neighbor_coords]
             live_neighbors = [neighbor for neighbor in neighbors if neighbor.alive]
             return len(live_neighbors)
+
+        self._save_current_state()
+        print(len(self.history))
         
         # Update cell states
         for row in self.matrix:
@@ -64,7 +76,17 @@ class CellMatrix:
                 else:
                     if live_neighbor_count == 3:
                         cell.next_state = Cell.ALIVE
-        
+
+    def step_back(self):
+        if len(self.history) > 0:
+            for (i, row) in enumerate(self.history[-1]):
+                for (j, state) in enumerate(row):
+                    cell = self.matrix[i][j]
+                    cell.alive = state
+                    cell.next_state = None
+            del self.history[-1]
+
+
 
 class Cell:
     DEAD = 0
