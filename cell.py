@@ -1,7 +1,7 @@
 from typing import List
 import time
 
-import pygame
+from pygame import Rect
 
 from ui import UI
 
@@ -17,7 +17,7 @@ class CellMatrix:
         x_pos, y_pos = 0, 0
         for row in matrix:
             for index in range(matrix_size):
-                row.append(Cell(pygame.Rect(x_pos, y_pos, cell_size, cell_size)))
+                row.append(Cell(Rect(x_pos, y_pos, cell_size, cell_size)))
                 if (index + 1) % matrix_size == 0:
                     x_pos = 0
                     y_pos += cell_size + UI.get_line_width()
@@ -70,7 +70,7 @@ class Cell:
     DEAD = 0
     ALIVE = 1
 
-    def __init__(self, rect: pygame.Rect):
+    def __init__(self, rect: Rect):
         self.alive = False
         self.next_state = None
         self.rect = rect

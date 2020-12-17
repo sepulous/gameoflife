@@ -20,15 +20,16 @@ def main():
     pygame.init()
     pygame.display.set_caption(WINDOW_TITLE)
     
-    os.environ['SDL_VIDEO_CENTERED'] = '1' # Center the window
+    os.environ["SDL_VIDEO_CENTERED"] = "1" # Center the window
 
     window_size = int(pygame.display.Info().current_h * 0.8)
     window = pygame.display.set_mode((window_size, window_size))
 
-    font = pygame.font.SysFont('consolas', 18)
+    font = pygame.font.SysFont("consolas", 18)
+    icon = pygame.image.load("icon.png")
+    pygame.display.set_icon(icon)
     
-    matrix_order = 30
-    cell_matrix = CellMatrix(matrix_order, window_size)
+    cell_matrix = CellMatrix(30, window_size)
 
     game_state = STATE_RESET
     while True:
@@ -65,9 +66,23 @@ def main():
             pygame.draw.rect(window, color, cell.rect)
 
         # Draw menu
-        pygame.draw.rect(window, 0xffffff, pygame.Rect(0, 0, int(window_size * 0.35), 50))
-        text_surface = font.render(f'[SPACE] {"Pause" if game_state == STATE_RUNNING else "Start"}  [ESC] Reset', True, (0, 0, 0))
-        window.blit(text_surface, (10, 15))
+        menu_background = pygame.Surface((int(window_size * 0.25), int(window_size * 0.20)))
+        menu_background.set_alpha(200)
+        menu_background.fill((0, 0, 0))
+        window.blit(menu_background, (10, 10))
+
+        menu_text = [
+            "[ESC] Reset",
+            f"[SPACE] {'Pause' if game_state == STATE_RUNNING else 'Start'}",
+        ]
+        text_offset_y = 0.1 * window_size * 0.25
+        for text in menu_text:
+            text_surface = font.render(text, True, (255, 255, 255))
+            window.blit(text_surface, (20, text_offset_y))
+            text_offset_y *= 2
+
+        text_surface = font.render("[H] Hide Menu", True, (255, 255, 255))
+        window.blit(text_surface, (20, window_size * 0.18))
 
         pygame.display.flip()
 

@@ -1,5 +1,4 @@
 
-
 class UI:
     line_width = 1
     updates_per_second = 10
