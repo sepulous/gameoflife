@@ -49,6 +49,8 @@ def main():
                 elif event.key == pygame.K_ESCAPE:
                     game_state = STATE_RESET
                     cell_matrix.reset()
+                elif event.key == pygame.K_h:
+                    UI.set_menu_shown(not UI.get_menu_shown())
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Left click
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
@@ -59,30 +61,31 @@ def main():
                             cell.toggle()
                             break
 
-        # Draw cells
+        # Render cells
         window.fill(0)
         for cell in cell_matrix.get_cells():
             color = 0x0 if cell.alive else 0xffffff
             pygame.draw.rect(window, color, cell.rect)
 
-        # Draw menu
-        menu_background = pygame.Surface((int(window_size * 0.25), int(window_size * 0.20)))
-        menu_background.set_alpha(200)
-        menu_background.fill((0, 0, 0))
-        window.blit(menu_background, (10, 10))
+        # Render menu
+        if UI.get_menu_shown():
+            menu_background = pygame.Surface((int(window_size * 0.25), int(window_size * 0.20)))
+            menu_background.set_alpha(200)
+            menu_background.fill((0, 0, 0))
+            window.blit(menu_background, (10, 10))
 
-        menu_text = [
-            "[ESC] Reset",
-            f"[SPACE] {'Pause' if game_state == STATE_RUNNING else 'Start'}",
-        ]
-        text_offset_y = 0.1 * window_size * 0.25
-        for text in menu_text:
-            text_surface = font.render(text, True, (255, 255, 255))
-            window.blit(text_surface, (20, text_offset_y))
-            text_offset_y *= 2
+            menu_text = [
+                "  [ESC]  Reset",
+                "[SPACE]  {}".format("Pause" if game_state == STATE_RUNNING else "Start")
+            ]
+            text_offset_y = window_size * 0.025
+            for text in menu_text:
+                text_surface = font.render(text, True, (255, 255, 255))
+                window.blit(text_surface, (20, text_offset_y))
+                text_offset_y *= 2
 
-        text_surface = font.render("[H] Hide Menu", True, (255, 255, 255))
-        window.blit(text_surface, (20, window_size * 0.18))
+            text_surface = font.render("[H] Hide Menu", True, (255, 255, 255))
+            window.blit(text_surface, (20, window_size * 0.18))
 
         pygame.display.flip()
 
