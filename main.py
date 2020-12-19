@@ -1,4 +1,3 @@
-import time
 import sys
 import os
 
@@ -19,20 +18,17 @@ STATE_RESET = 2
 def main():
     pygame.init()
     pygame.display.set_caption(WINDOW_TITLE)
-    
-    os.environ["SDL_VIDEO_CENTERED"] = "1" # Center the window
-
-    initial_window_size = int(pygame.display.Info().current_h * 0.8)
-    matrix_order = 30
-    cell_matrix = CellMatrix(matrix_order, initial_window_size)
-    cell_size = cell_matrix.get_cells()[0].rect.size[0]
-    window_size = UI.get_line_width()*(matrix_order + 1) + matrix_order*cell_size
-
-    window = pygame.display.set_mode((window_size, window_size))
 
     font = pygame.font.SysFont("consolas", 18)
     icon = pygame.image.load("icon.png")
     pygame.display.set_icon(icon)    
+    
+    os.environ["SDL_VIDEO_CENTERED"] = "1" # Center the window
+    initial_window_size = int(pygame.display.Info().current_h * 0.8)
+    cell_matrix = CellMatrix(30, initial_window_size)
+    cell_size = cell_matrix.get_cells()[0].rect.size[0]
+    window_size = UI.get_line_width()*31 + 30*cell_size
+    window = pygame.display.set_mode((window_size, window_size))
     
     current_iteration = 0
     max_iterations = 0
@@ -77,7 +73,7 @@ def main():
                     UI.set_update_speed(UI.get_update_speed() + 1)
                 elif event.key == pygame.K_DOWN:
                     UI.set_update_speed(UI.get_update_speed() - 1)
-            # Set/unset cell
+            # Toggle cell
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
