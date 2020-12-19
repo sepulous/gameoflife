@@ -84,6 +84,9 @@ class CellMatrix:
                     cell.alive = prev_state[0]
                     cell.next_state = prev_state[1]
             del self.history[-1]
+            return True
+        else:
+            return False
 
 
 

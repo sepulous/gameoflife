@@ -52,6 +52,7 @@ def main():
                 elif event.key == pygame.K_ESCAPE:
                     game_state = STATE_RESET
                     cell_matrix.reset()
+                    current_iteration = max_iterations = 0
                 # Show/hide menu
                 elif event.key == pygame.K_h:
                     UI.set_menu_shown(not UI.get_menu_shown())
@@ -64,9 +65,9 @@ def main():
                             max_iterations += 1
                 elif event.key == pygame.K_LEFT:
                     if game_state != STATE_RUNNING:
-                        cell_matrix.step_back()
-                        if current_iteration > 0:
-                            current_iteration -= 1
+                        if cell_matrix.step_back():
+                            if current_iteration > 0:
+                                current_iteration -= 1
                 # Adjusting update speed
                 elif event.key == pygame.K_UP:
                     UI.set_update_speed(UI.get_update_speed() + 1)
