@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 - 12/18/2020
+## v0.1.0 - 12/18/2020
 ### Added
 * Game of Life simulation
 * Ability to change update speed
