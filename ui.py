@@ -13,12 +13,13 @@ class UI:
         UI.line_width = width
 
     @staticmethod
-    def get_updates_per_second():
+    def get_update_speed():
         return UI.updates_per_second
 
     @staticmethod
-    def set_updates_per_second(ups: int):
-        UI.updates_per_second = ups
+    def set_update_speed(rate: int):
+        if rate > 0:
+            UI.updates_per_second = rate
 
     @staticmethod
     def get_menu_shown():

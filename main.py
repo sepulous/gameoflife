@@ -34,7 +34,7 @@ def main():
     game_state = STATE_RESET
     while True:
         if game_state == STATE_RUNNING:
-            pygame.time.Clock().tick(UI.get_updates_per_second())
+            pygame.time.Clock().tick(UI.get_update_speed())
             cell_matrix.update()
             
         for event in pygame.event.get():
@@ -57,6 +57,10 @@ def main():
                 elif event.key == pygame.K_LEFT:
                     if game_state != STATE_RUNNING:
                         cell_matrix.step_back()
+                elif event.key == pygame.K_UP:
+                    UI.set_update_speed(UI.get_update_speed() + 1)
+                elif event.key == pygame.K_DOWN:
+                    UI.set_update_speed(UI.get_update_speed() - 1)
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Left click
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
@@ -75,7 +79,7 @@ def main():
 
         # Render menu
         if UI.get_menu_shown():
-            menu_background = pygame.Surface((int(window_size * 0.25), int(window_size * 0.20)))
+            menu_background = pygame.Surface((int(window_size * 0.28), int(window_size * 0.20)))
             menu_background.set_alpha(200)
             menu_background.fill((0, 0, 0))
             window.blit(menu_background, (10, 10))
@@ -83,7 +87,8 @@ def main():
             menu_text = [
                 "  [ESC]  Reset",
                 "[SPACE]  {}".format("Pause" if game_state == STATE_RUNNING else "Start"),
-                "[<] [>]  Single Step"
+                "[<] [>]  Single Step",
+                "[Ʌ] [V]  Update Speed",
             ]
             text_offset_y = window_size * 0.025
             for text in menu_text:

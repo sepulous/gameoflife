@@ -56,7 +56,6 @@ class CellMatrix:
             return len(live_neighbors)
 
         self._save_current_state()
-        print(len(self.history))
         
         # Update cell states
         for row in self.matrix:
