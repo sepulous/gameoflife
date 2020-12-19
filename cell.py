@@ -7,20 +7,20 @@ from ui import UI
 
 class CellMatrix:
     def __init__(self, matrix_size: int, window_size: int):
-        self.matrix_size = matrix_size
         self.matrix = self._generate_matrix(matrix_size, window_size)
-        self.last_update = 0
+        self.matrix_size = matrix_size
         self.history = []
+        self.last_update = 0
 
     def _generate_matrix(self, matrix_size: int, window_size: int):
         matrix = [[] for _ in range(matrix_size)]
-        cell_size = (window_size / matrix_size) - UI.get_line_width()
-        x_pos, y_pos = 0, 0
+        x_pos = y_pos = UI.get_line_width()
+        cell_size = int((window_size - UI.get_line_width()*(matrix_size + 1)) / matrix_size)
         for row in matrix:
             for index in range(matrix_size):
                 row.append(Cell(Rect(x_pos, y_pos, cell_size, cell_size)))
                 if (index + 1) % matrix_size == 0:
-                    x_pos = 0
+                    x_pos = UI.get_line_width()
                     y_pos += cell_size + UI.get_line_width()
                 else:
                     x_pos += cell_size + UI.get_line_width()
