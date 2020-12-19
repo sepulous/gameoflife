@@ -30,38 +30,50 @@ def main():
     pygame.display.set_icon(icon)
     
     cell_matrix = CellMatrix(30, window_size)
-
+    current_iteration = 0
+    max_iterations = 0
     game_state = STATE_RESET
+
     while True:
         if game_state == STATE_RUNNING:
             pygame.time.Clock().tick(UI.get_update_speed())
             cell_matrix.update()
+            current_iteration += 1
+            if current_iteration > max_iterations:
+                max_iterations += 1
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
+                # Pause/reset
                 if event.key == pygame.K_SPACE:
-                    if game_state == STATE_RUNNING:
-                        game_state = STATE_PAUSED
-                    else:
-                        game_state = STATE_RUNNING
+                    game_state = not game_state
                 elif event.key == pygame.K_ESCAPE:
                     game_state = STATE_RESET
                     cell_matrix.reset()
+                # Show/hide menu
                 elif event.key == pygame.K_h:
                     UI.set_menu_shown(not UI.get_menu_shown())
+                # Single-stepping
                 elif event.key == pygame.K_RIGHT:
                     if game_state != STATE_RUNNING:
                         cell_matrix.update()
+                        current_iteration += 1
+                        if current_iteration > max_iterations:
+                            max_iterations += 1
                 elif event.key == pygame.K_LEFT:
                     if game_state != STATE_RUNNING:
                         cell_matrix.step_back()
+                        if current_iteration > 0:
+                            current_iteration -= 1
+                # Adjusting update speed
                 elif event.key == pygame.K_UP:
                     UI.set_update_speed(UI.get_update_speed() + 1)
                 elif event.key == pygame.K_DOWN:
                     UI.set_update_speed(UI.get_update_speed() - 1)
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Left click
+            # Set/unset cell
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if game_state != STATE_RUNNING:
                     mouse_x, mouse_y = event.pos[0], event.pos[1]
                     for cell in cell_matrix.get_cells():
@@ -79,12 +91,15 @@ def main():
 
         # Render menu
         if UI.get_menu_shown():
-            menu_background = pygame.Surface((int(window_size * 0.28), int(window_size * 0.20)))
+            menu_background = pygame.Surface((int(window_size * 0.28), int(window_size * 0.28)))
             menu_background.set_alpha(200)
             menu_background.fill((0, 0, 0))
             window.blit(menu_background, (10, 10))
 
             menu_text = [
+                "Iteration: {}/{}".format(current_iteration, max_iterations),
+                "Update Speed: {}/s".format(UI.get_update_speed()),
+                "",
                 "  [ESC]  Reset",
                 "[SPACE]  {}".format("Pause" if game_state == STATE_RUNNING else "Start"),
                 "[<] [>]  Single Step",
@@ -97,7 +112,7 @@ def main():
                 text_offset_y += 25
 
             text_surface = font.render("[H] Hide Menu", True, (255, 255, 255))
-            window.blit(text_surface, (20, window_size * 0.18))
+            window.blit(text_surface, (20, text_offset_y + 20))
 
         pygame.display.flip()
 
