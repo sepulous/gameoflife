@@ -32,7 +32,7 @@ class CellMatrix:
             del self.history[0]
             
         self.history.append([
-            [cell.alive for cell in row] for row in self.matrix
+            [(cell.alive, cell.next_state) for cell in row] for row in self.matrix
         ])
 
     def get_cells(self):
@@ -79,10 +79,10 @@ class CellMatrix:
     def step_back(self):
         if len(self.history) > 0:
             for (i, row) in enumerate(self.history[-1]):
-                for (j, state) in enumerate(row):
+                for (j, prev_state) in enumerate(row):
                     cell = self.matrix[i][j]
-                    cell.alive = state
-                    cell.next_state = None
+                    cell.alive = prev_state[0]
+                    cell.next_state = prev_state[1]
             del self.history[-1]
 
 
