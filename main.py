@@ -58,13 +58,13 @@ def main():
                     UI.set_menu_shown(not UI.get_menu_shown())
                 # Single-stepping
                 elif event.key == pygame.K_RIGHT:
-                    if game_state != STATE_RUNNING:
+                    if game_state == STATE_PAUSED:
                         cell_matrix.update()
                         current_iteration += 1
                         if current_iteration > max_iterations:
                             max_iterations += 1
                 elif event.key == pygame.K_LEFT:
-                    if game_state != STATE_RUNNING:
+                    if game_state == STATE_PAUSED:
                         if cell_matrix.step_back():
                             if current_iteration > 0:
                                 current_iteration -= 1
