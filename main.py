@@ -7,8 +7,8 @@ from cell import *
 from ui import UI
 
 
-VERSION = '0.1.0'
-WINDOW_TITLE = f'Game of Life v{VERSION}'
+VERSION = '0.2.0-indev'
+WINDOW_TITLE = f'Game of Life (v{VERSION})'
 
 STATE_RUNNING = 0
 STATE_PAUSED = 1
