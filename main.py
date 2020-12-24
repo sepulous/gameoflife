@@ -29,7 +29,8 @@ def main():
     cell_size = cell_matrix.get_cells()[0].rect.size[0]
     window_size = UI.get_line_width()*31 + 30*cell_size
     window = pygame.display.set_mode((window_size, window_size))
-    
+
+    current_toggled_cells = []
     current_iteration = 0
     max_iterations = 0
     game_state = STATE_RESET
@@ -73,16 +74,20 @@ def main():
                     UI.set_update_speed(UI.get_update_speed() + 1)
                 elif event.key == pygame.K_DOWN:
                     UI.set_update_speed(UI.get_update_speed() - 1)
-            # Toggle cell
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Toggling cells
+            elif pygame.mouse.get_pressed()[0]:
                 if game_state != STATE_RUNNING:
-                    mouse_x, mouse_y = event.pos[0], event.pos[1]
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
                     for cell in cell_matrix.get_cells():
                         between_x_bounds = cell.rect.x <= mouse_x <= cell.rect.x + cell.rect.size[0] + UI.get_line_width()
                         between_y_bounds = cell.rect.y <= mouse_y <= cell.rect.y + cell.rect.size[0] + UI.get_line_width()
-                        if between_x_bounds and between_y_bounds:
+                        if (between_x_bounds and between_y_bounds) and (id(cell) not in current_toggled_cells):
                             cell.toggle()
+                            current_toggled_cells.append(id(cell))
                             break
+            elif event.type == pygame.MOUSEBUTTONUP:
+                current_toggled_cells.clear()
+
 
         # Render cells
         window.fill(0)
