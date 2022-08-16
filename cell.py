@@ -101,3 +101,6 @@ class Cell:
 
     def toggle(self):
         self.alive = not self.alive
+
+    def set_alive(status: bool):
+        self.alive = status

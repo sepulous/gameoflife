@@ -6,7 +6,6 @@ import pygame
 from cell import *
 from ui import UI
 
-
 VERSION = '0.2.0-indev'
 WINDOW_TITLE = f'Game of Life (v{VERSION})'
 
@@ -33,6 +32,7 @@ def main():
     current_toggled_cells = []
     current_iteration = 0
     max_iterations = 0
+    deleting = False
     game_state = STATE_RESET
 
     while True:
@@ -65,10 +65,8 @@ def main():
                         if current_iteration > max_iterations:
                             max_iterations += 1
                 elif event.key == pygame.K_LEFT:
-                    if game_state == STATE_PAUSED:
-                        if cell_matrix.step_back():
-                            if current_iteration > 0:
-                                current_iteration -= 1
+                    if game_state == STATE_PAUSED and cell_matrix.step_back() and current_iteration > 0:
+                        current_iteration -= 1
                 # Adjusting update speed
                 elif event.key == pygame.K_UP:
                     UI.set_update_speed(UI.get_update_speed() + 1)
@@ -82,11 +80,15 @@ def main():
                         between_x_bounds = cell.rect.x <= mouse_x <= cell.rect.x + cell.rect.size[0] + UI.get_line_width()
                         between_y_bounds = cell.rect.y <= mouse_y <= cell.rect.y + cell.rect.size[0] + UI.get_line_width()
                         if (between_x_bounds and between_y_bounds) and (id(cell) not in current_toggled_cells):
-                            cell.toggle()
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                deleting = not cell.toggle()
+                            else:
+                                cell.set_alive(not deleting)
                             current_toggled_cells.append(id(cell))
                             break
             elif event.type == pygame.MOUSEBUTTONUP:
                 current_toggled_cells.clear()
+                deleting = False
 
 
         # Render cells
