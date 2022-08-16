@@ -39,6 +39,7 @@ class CellMatrix:
     def reset(self):
         for cell in self.get_cells():
             cell.set_alive(False)
+            cell.next_state = None
         self.history.clear()
 
     def update(self):

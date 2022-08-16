@@ -88,6 +88,7 @@ def main():
                 current_toggled_cells.clear()
                 deleting = False
                 if not any([cell.alive for cell in cell_matrix.get_cells()]):
+                    game_state = STATE_RESET
                     cell_matrix.reset()
                     current_iteration = max_iterations = 0
 
