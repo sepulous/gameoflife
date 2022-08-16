@@ -1,24 +1,22 @@
+import pygame
 import sys
 import os
-
-import pygame
 
 from cell import *
 from ui import UI
 
-VERSION = '0.2.0-indev'
+VERSION = '0.3.0-indev'
 WINDOW_TITLE = f'Game of Life (v{VERSION})'
 
 STATE_RUNNING = 0
 STATE_PAUSED = 1
 STATE_RESET = 2
 
-
 def main():
     pygame.init()
     pygame.display.set_caption(WINDOW_TITLE)
 
-    font = pygame.font.SysFont("consolas", 18)
+    font = pygame.font.SysFont("consolas", 24)
     icon = pygame.image.load("icon.png")
     pygame.display.set_icon(icon)    
     
@@ -27,11 +25,11 @@ def main():
     cell_matrix = CellMatrix(30, initial_window_size)
     cell_size = cell_matrix.get_cells()[0].rect.size[0]
     window_size = UI.get_line_width()*31 + 30*cell_size
+    background_size = int(window_size * 0.28)
     window = pygame.display.set_mode((window_size, window_size))
 
     current_toggled_cells = []
-    current_iteration = 0
-    max_iterations = 0
+    current_iteration = max_iterations = 0
     deleting = False
     game_state = STATE_RESET
 
@@ -51,7 +49,6 @@ def main():
                 if event.key == pygame.K_SPACE:
                     game_state = not game_state
                 elif event.key == pygame.K_ESCAPE:
-                    print("Resetting")
                     game_state = STATE_RESET
                     cell_matrix.reset()
                     current_iteration = max_iterations = 0
@@ -91,7 +88,6 @@ def main():
                 current_toggled_cells.clear()
                 deleting = False
                 if not any([cell.alive for cell in cell_matrix.get_cells()]):
-                    print("Resetting")
                     cell_matrix.reset()
 
 
@@ -103,7 +99,7 @@ def main():
 
         # Render menu
         if UI.get_menu_shown():
-            menu_background = pygame.Surface((int(window_size * 0.28), int(window_size * 0.28)))
+            menu_background = pygame.Surface((background_size, background_size))
             menu_background.set_alpha(200)
             menu_background.fill((0, 0, 0))
             window.blit(menu_background, (10, 10))
@@ -121,7 +117,7 @@ def main():
             for text in menu_text:
                 text_surface = font.render(text, True, (255, 255, 255))
                 window.blit(text_surface, (20, text_offset_y))
-                text_offset_y += 25
+                text_offset_y += 30
 
             text_surface = font.render("[H] Hide Menu", True, (255, 255, 255))
             window.blit(text_surface, (20, text_offset_y + 20))

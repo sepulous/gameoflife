@@ -10,7 +10,6 @@ class CellMatrix:
         self.matrix = self._generate_matrix(matrix_size, window_size)
         self.matrix_size = matrix_size
         self.history = []
-        self.last_update = 0
 
     def _generate_matrix(self, matrix_size: int, window_size: int):
         matrix = [[] for _ in range(matrix_size)]
@@ -41,13 +40,14 @@ class CellMatrix:
     def reset(self):
         for cell in self.get_cells():
             cell.set_alive(False)
+        self.history.clear()
 
     def update(self):
         def get_live_neighbor_count(i: int, j: int) -> List[Cell]:
             neighbor_coords = [
-                (i - 1, j - 1), (i - 1, j), (i - 1, j + 1),
-                (i,     j - 1),             (i,     j + 1),
-                (i + 1, j - 1), (i + 1, j), (i + 1, j + 1)
+                (i-1, j-1), (i-1, j), (i-1, j+1),
+                (i,   j-1),           (i,   j+1),
+                (i+1, j-1), (i+1, j), (i+1, j+1)
             ]
             neighbor_coords = [c for c in neighbor_coords if (0 <= c[0] < self.matrix_size) and (0 <= c[1] < self.matrix_size)]
             neighbors = [self.matrix[coord[0]][coord[1]] for coord in neighbor_coords]
@@ -76,16 +76,16 @@ class CellMatrix:
                         cell.next_state = Cell.ALIVE
 
     def step_back(self):
-        if len(self.history) > 0:
-            for (i, row) in enumerate(self.history[-1]):
-                for (j, prev_state) in enumerate(row):
-                    cell = self.matrix[i][j]
-                    cell.alive = prev_state[0]
-                    cell.next_state = prev_state[1]
-            del self.history[-1]
-            return True
-        else:
+        if len(self.history) == 0:
             return False
+
+        for (i, row) in enumerate(self.history[-1]):
+            for (j, prev_state) in enumerate(row):
+                cell = self.matrix[i][j]
+                cell.alive = prev_state[0]
+                cell.next_state = prev_state[1]
+        del self.history[-1]
+        return True
 
 
 
