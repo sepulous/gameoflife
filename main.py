@@ -90,9 +90,9 @@ def main():
             elif event.type == pygame.MOUSEBUTTONUP:
                 current_toggled_cells.clear()
                 deleting = False
-                # if not any([cell.alive for cell in cell_matrix.get_cells()]):
-                #     print("Resetting")
-                #     cell_matrix.reset()
+                if not any([cell.alive for cell in cell_matrix.get_cells()]):
+                    print("Resetting")
+                    cell_matrix.reset()
 
 
         # Render cells

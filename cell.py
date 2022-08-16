@@ -39,9 +39,8 @@ class CellMatrix:
         return [cell for row in self.matrix for cell in row] # Flatten 2D matrix
 
     def reset(self):
-        for row in self.matrix:
-            for cell in row:
-                cell.alive = False
+        for cell in self.get_cells():
+            cell.set_alive(False)
 
     def update(self):
         def get_live_neighbor_count(i: int, j: int) -> List[Cell]:
