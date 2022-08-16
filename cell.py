@@ -99,8 +99,9 @@ class Cell:
         self.next_state = None
         self.rect = rect
 
-    def toggle(self):
+    def toggle(self) -> bool:
         self.alive = not self.alive
+        return self.alive
 
-    def set_alive(status: bool):
+    def set_alive(self, status: bool):
         self.alive = status

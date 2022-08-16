@@ -51,6 +51,7 @@ def main():
                 if event.key == pygame.K_SPACE:
                     game_state = not game_state
                 elif event.key == pygame.K_ESCAPE:
+                    print("Resetting")
                     game_state = STATE_RESET
                     cell_matrix.reset()
                     current_iteration = max_iterations = 0
@@ -89,6 +90,9 @@ def main():
             elif event.type == pygame.MOUSEBUTTONUP:
                 current_toggled_cells.clear()
                 deleting = False
+                # if not any([cell.alive for cell in cell_matrix.get_cells()]):
+                #     print("Resetting")
+                #     cell_matrix.reset()
 
 
         # Render cells
