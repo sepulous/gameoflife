@@ -5,8 +5,7 @@ import os
 from cell import *
 from ui import UI
 
-VERSION = '0.3.0-indev'
-WINDOW_TITLE = f'Game of Life (v{VERSION})'
+WINDOW_TITLE = f'Game of Life (indev)'
 
 STATE_RUNNING = 0
 STATE_PAUSED = 1
