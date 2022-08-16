@@ -1,7 +1,6 @@
+from pygame import Rect
 from typing import List
 import time
-
-from pygame import Rect
 
 from ui import UI
 

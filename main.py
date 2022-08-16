@@ -89,7 +89,7 @@ def main():
                 deleting = False
                 if not any([cell.alive for cell in cell_matrix.get_cells()]):
                     cell_matrix.reset()
-
+                    current_iteration = max_iterations = 0
 
         # Render cells
         window.fill(0)
