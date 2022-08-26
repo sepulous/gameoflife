@@ -26,7 +26,7 @@ class CellMatrix:
         return matrix
 
     def _save_current_state(self):
-        if len(self.history) >= 30:
+        if len(self.history) >= 200:
             del self.history[0]
             
         self.history.append([
